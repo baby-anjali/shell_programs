@@ -14,13 +14,13 @@ const echo = function (args) {
 };
 
 const cd = function (args) {
-  if (args.length > 1) {
-    return 'cd: too many arguments';
-  }
-
   if (args.join('') === '') {
     directories = directories.reverse().slice(-1);
     return;
+  }
+
+  if (args.length > 1) {
+    return 'cd: too many arguments';
   }
 
   if (args[0] === '..') {
@@ -50,6 +50,8 @@ const pwd = function () {
   return '/Users/anjalibaby' + separator + path.join('/');
 };
 
+
+
 const shell = function (command, args) {
   if (command === '') {
     return;
@@ -61,7 +63,7 @@ const shell = function (command, args) {
     case 'exit': runProcess = false;
       return exitMessage;
     case 'touch':
-    case 'rmdir':
+    case 'rmdir': return rmdir(args);
     case 'mkdir': return;
     case 'pwd': return pwd();
     case 'rm': return rm(args);
