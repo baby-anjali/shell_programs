@@ -25,6 +25,14 @@ const cd = function (args) {
   currentDirectory.push(args[0]);
 };
 
+const rm = function (args) {
+  if (!args[0].includes('.')) {
+    return 'rm: ' + args + ': is a directory';
+  }
+
+  return;
+};
+
 const shell = function (command, args) {
   if (command === '') {
     return;
@@ -35,6 +43,11 @@ const shell = function (command, args) {
     case 'cd': return cd(args);
     case 'exit': runProcess = false;
       return exitMessage;
+    case 'touch':
+    case 'mkdir': return;
+    case 'rm': return rm(args);
+    case 'clear': console.clear();
+      return;
     default: return 'ssh: command not found';
   }
 };
