@@ -1,7 +1,17 @@
 const PROMPT = "anjalibaby@Anjalis-MacBook-Pro % "
 
-while (true) {
-  const commandScript = prompt(PROMPT);
+const echo = function (args) {
+  return args.join(' ');
+}
 
-  console.log("Your command: ", commandScript);
+const shell = function (command, args) {
+  switch (command) {
+    case 'echo': return echo(args);
+  }
+}
+while (true) {
+  const commandString = prompt(PROMPT);
+  const [command, ...args] = commandString.split(' ');
+
+  console.log(shell(command, args));
 }
