@@ -1,3 +1,7 @@
+const PROMPT = "anjalibaby@Anjalis-MacBook-Pro % "
+
 while (true) {
-  console.log();
+  const commandScript = prompt(PROMPT);
+
+  console.log("Your command: ", commandScript);
 }
