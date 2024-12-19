@@ -4,9 +4,10 @@ const exitMessage = '\nSaving session...' +
   '\n...saving history...truncating history files...' +
   '\n...completed.\n\n[Process completed]';
 
-let runProcess = true;
+const files = [];
 
-let currentDirectory = ['~'];
+let runProcess = true;
+let directories = ['~'];
 
 const echo = function (args) {
   return args.join(' ');
@@ -17,16 +18,21 @@ const cd = function (args) {
     return 'cd: too many arguments';
   }
 
-  if (args[0] === '..') {
-    if (currentDirectory.length === 1) {
-      return 'No other parent directory';
-    }
-
-    currentDirectory.pop();
+  if (args.join('') === '') {
+    directories = directories.reverse().slice(-1);
     return;
   }
 
-  currentDirectory.push(args[0]);
+  if (args[0] === '..') {
+    if (directories.length === 1) {
+      return 'No other parent directory';
+    }
+
+    directories.pop();
+    return;
+  }
+
+  directories.push(args[0]);
 };
 
 const rm = function (args) {
@@ -35,6 +41,13 @@ const rm = function (args) {
   }
 
   return;
+};
+
+const pwd = function () {
+  const path = directories.slice(1);
+  const separator = path.length > 0 ? '/' : '';
+
+  return '/Users/anjalibaby' + separator + path.join('/');
 };
 
 const shell = function (command, args) {
@@ -48,7 +61,9 @@ const shell = function (command, args) {
     case 'exit': runProcess = false;
       return exitMessage;
     case 'touch':
+    case 'rmdir':
     case 'mkdir': return;
+    case 'pwd': return pwd();
     case 'rm': return rm(args);
     case 'clear': console.clear();
       return;
@@ -58,7 +73,7 @@ const shell = function (command, args) {
 
 
 while (runProcess) {
-  const directory = currentDirectory.at(-1);
+  const directory = directories.at(-1);
   const commandString = prompt(PROMPT + directory + ' %');
   const [command, ...args] = commandString.split(' ');
 
