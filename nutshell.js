@@ -1,4 +1,9 @@
 const PROMPT = "anjalibaby@Anjalis-MacBook-Pro "
+const exitMessage = '\nSaving session...' +
+  '\n...copying shared history...' +
+  '\n...saving history...truncating history files...' +
+  '\n...completed.\n\n[Process completed]';
+        
 let runProcess = true;
 
 let currentDirectory = [''];
@@ -25,7 +30,7 @@ const shell = function (command, args) {
     case 'echo': return echo(args);
     case 'cd': return cd(args);
     case 'exit': runProcess = false;
-      return '\nSaving session...\n...copying shared history...\n...saving history...truncating history files...\n...completed.\n\n[Process completed]';
+      return 
     default: return 'nutshell: command not found';
   }
 }
