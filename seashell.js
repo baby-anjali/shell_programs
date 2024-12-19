@@ -13,6 +13,10 @@ const echo = function (args) {
 };
 
 const cd = function (args) {
+  if (args.length > 1) {
+    return 'cd: too many arguments';
+  }
+
   if (args[0] === '..') {
     if (currentDirectory.length === 1) {
       return 'No other parent directory';
