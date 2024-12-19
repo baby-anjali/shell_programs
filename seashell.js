@@ -1,39 +1,43 @@
-const PROMPT = "anjalibaby@Anjalis-MacBook-Pro "
+const PROMPT = "anjalibaby@Anjalis-MacBook-Pro ";
 const exitMessage = '\nSaving session...' +
   '\n...copying shared history...' +
   '\n...saving history...truncating history files...' +
   '\n...completed.\n\n[Process completed]';
-        
+
 let runProcess = true;
 
 let currentDirectory = [''];
 
 const echo = function (args) {
   return args.join(' ');
-}
+};
 
 const cd = function (args) {
-  if (args[0] === '..' && currentDirectory.length > 1) {
+  if (args[0] === '..') {
+    if (currentDirectory.length === 1) {
+      return 'No other parent directory';
+    }
     currentDirectory.pop();
     return;
   }
 
-  if (currentDirectory.length === 1) {
-    return 'No other parent directory';
-  }
 
   currentDirectory.push(args[0]);
-}
+};
 
 const shell = function (command, args) {
+  if (command === '') {
+    return;
+  }
+
   switch (command) {
     case 'echo': return echo(args);
     case 'cd': return cd(args);
     case 'exit': runProcess = false;
-      return 
-    default: return 'nutshell: command not found';
+      return exitMessage;
+    default: return 'ssh: command not found';
   }
-}
+};
 
 
 while (runProcess) {
@@ -42,7 +46,7 @@ while (runProcess) {
   const [command, ...args] = commandString.split(' ');
 
   const commandResult = shell(command, args);
-  if (commandResult !== undefined) {
+  if (commandResult) {
     console.log(shell(command, args));
   }
 }
