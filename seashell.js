@@ -7,7 +7,8 @@ const exitMessage = '\nSaving session...' +
 const files = [];
 
 let runProcess = true;
-let directories = ['~'];
+const allDirectories = ['~'];
+let path = ['~'];
 
 const echo = function (args) {
   return args.join(' ');
@@ -15,7 +16,7 @@ const echo = function (args) {
 
 const cd = function (args) {
   if (args.join('') === '') {
-    directories = directories.reverse().slice(-1);
+    path = path.reverse().slice(-1);
     return;
   }
 
@@ -24,15 +25,15 @@ const cd = function (args) {
   }
 
   if (args[0] === '..') {
-    if (directories.length === 1) {
+    if (path.length === 1) {
       return 'No other parent directory';
     }
 
-    directories.pop();
+    path.pop();
     return;
   }
 
-  directories.push(args[0]);
+  path.push(args[0]);
 };
 
 const rm = function (args) {
@@ -44,13 +45,28 @@ const rm = function (args) {
 };
 
 const pwd = function () {
-  const path = directories.slice(1);
+  const path = path.slice(1);
   const separator = path.length > 0 ? '/' : '';
 
   return '/Users/anjalibaby' + separator + path.join('/');
 };
 
+const rmdir = function (args) {
+  const currentIndex = allDirectories.indexOf(path.at(-1));
+  const list = allDirectories.slice(currentIndex);
+  console.log(list);
 
+  for (const dir of args) {
+    if (!list.includes(args)) {
+      return 'rmdir:' + dir + ': No such file or directory';
+    }
+
+    const dirIndex = path.indexOf(dir);
+    path.splice(dirIndex, 1);
+  }
+
+  return;
+};
 
 const shell = function (command, args) {
   if (command === '') {
@@ -75,7 +91,7 @@ const shell = function (command, args) {
 
 
 while (runProcess) {
-  const directory = directories.at(-1);
+  const directory = path.at(-1);
   const commandString = prompt(PROMPT + directory + ' %');
   const [command, ...args] = commandString.split(' ');
 
